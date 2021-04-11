@@ -7,7 +7,7 @@ import(
 
 func Check(e error) {
 	if e != nil {
-		fmt.Printf("%+v\n", e)
+		fmt.Printf("ERROR: %+v\n", e)
 		os.Exit(1)
 	}
 }
