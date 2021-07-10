@@ -11,3 +11,10 @@ func Check(e error) {
 		os.Exit(1)
 	}
 }
+
+func CheckWithReason(e error, reason string) {
+	if e != nil {
+		fmt.Printf("%s: %+v\n", reason, e)
+		os.Exit(1)
+	}
+}
