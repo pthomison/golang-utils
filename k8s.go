@@ -11,7 +11,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/api/core/v1"
+	corev1 "k8s.io/api/core/v1"
+	appsv1 "k8s.io/api/apps/v1"
 	"context"
 
 )
@@ -60,8 +61,15 @@ func internalClientSet() (*kubernetes.Clientset, error) {
 	return clientset, nil
 }
 
-func GetPods(cs *kubernetes.Clientset, namespace string) (*v1.PodList, error) {
+func GetPods(cs *kubernetes.Clientset, namespace string) (*corev1.PodList, error) {
     listOptions:= metav1.ListOptions{}
     pods, err:=  cs.CoreV1().Pods(namespace).List(context.TODO(), listOptions)
     return pods, err
+}
+
+func GetDeployments(cs *kubernetes.Clientset, namespace string) (*appsv1.DeploymentList, error) {
+    listOptions:= metav1.ListOptions{}
+    deployments, err:=  cs.AppsV1().Deployments(namespace).List(context.TODO(), listOptions)
+
+    return deployments, err
 }
