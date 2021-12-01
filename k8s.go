@@ -1,11 +1,8 @@
 package utils
 
 import (
-	"fmt"
-	// "net/http"
-	// "html/template"
-	// "log"
 	"context"
+	"fmt"
 	"path/filepath"
 
 	appsv1 "k8s.io/api/apps/v1"
