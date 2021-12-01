@@ -57,10 +57,3 @@ func DeleteSecret(cs *kubernetes.Clientset, name string, namespace string) error
 
 	return err
 }
-
-// func CreateSecret(cs *kubernetes.Clientset, namespace string) (*corev1.SecretList, error) {
-// 	listOptions := metav1.ListOptions{}
-// 	deployments, err := cs.AppsV1().Deployments(namespace).List(context.TODO(), listOptions)
-
-// 	return deployments, err
-// }
