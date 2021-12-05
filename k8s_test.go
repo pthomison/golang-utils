@@ -65,7 +65,7 @@ func TestK8SGetSecret(t *testing.T) {
 	}
 }
 
-func TestK8SPutSecret(t *testing.T) {
+func TestK8SApplySecret(t *testing.T) {
 	cs, err := GetClientSet()
 	Check(err)
 
@@ -75,12 +75,49 @@ func TestK8SPutSecret(t *testing.T) {
 
 	fmt.Printf("%+v\n", data)
 
-	result, err := ApplySecret(cs, "test-secret", "default", data)
+	result, err := ApplySecret(cs, "test-apply-secret", "default", data)
 	Check(err)
 
 	fmt.Printf("%+v\n", result)
 
-	err = DeleteSecret(cs, "test-secret", "default")
+	err = DeleteSecret(cs, "test-apply-secret", "default")
+	Check(err)
+}
+
+func TestK8SUpdateSecret(t *testing.T) {
+	cs, err := GetClientSet()
+	Check(err)
+
+	// Update Start
+
+	emptyData := make(Secret)
+
+	result, err := ApplySecret(cs, "test-update-secret", "default", emptyData)
+	Check(err)
+
+	fmt.Printf("Update Start: %+v\n", result)
+
+	// Update A
+
+	aData := make(Secret)
+	aData["key_a"] = []byte("value_a")
+
+	result, err = UpdateSecret(cs, "test-update-secret", "default", aData)
+	Check(err)
+
+	fmt.Printf("Update A: %+v\n", result)
+
+	// Update B
+
+	bData := make(Secret)
+	bData["key_b"] = []byte("value_b")
+
+	result, err = UpdateSecret(cs, "test-update-secret", "default", bData)
+	Check(err)
+
+	fmt.Printf("Update B: %+v\n", result)
+
+	err = DeleteSecret(cs, "test-update-secret", "default")
 	Check(err)
 
 }

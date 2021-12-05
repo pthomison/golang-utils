@@ -2,12 +2,15 @@ package utils
 
 import (
 	"context"
+	"fmt"
 
 	corev1 "k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	applyCorev1 "k8s.io/client-go/applyconfigurations/core/v1"
 	metaCorev1 "k8s.io/client-go/applyconfigurations/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/util/retry"
 )
 
 type Secret map[string][]byte
@@ -49,6 +52,36 @@ func ApplySecret(cs *kubernetes.Clientset, name string, namespace string, secret
 		)
 
 	return s, err
+}
+
+func UpdateSecret(cs *kubernetes.Clientset, name string, namespace string, secret Secret) (*corev1.Secret, error) {
+	secretClient := cs.CoreV1().Secrets(namespace)
+
+	var apiSecret *v1.Secret
+
+	// Retrieve the latest version of Secret before attempting update
+	// RetryOnConflict uses exponential backoff to avoid exhausting the apiserver
+	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+		var getErr, updateErr error
+		apiSecret, getErr = secretClient.Get(context.TODO(), name, metav1.GetOptions{})
+		if getErr != nil {
+			panic(fmt.Errorf("Failed to get latest version of Secret: %v", getErr))
+		}
+
+		if apiSecret.Data == nil {
+			// var emptyData
+			apiSecret.Data = make(map[string][]byte)
+		}
+
+		for k, v := range secret {
+			apiSecret.Data[k] = v
+		}
+
+		apiSecret, updateErr = secretClient.Update(context.TODO(), apiSecret, metav1.UpdateOptions{})
+		return updateErr
+	})
+
+	return apiSecret, retryErr
 }
 
 func DeleteSecret(cs *kubernetes.Clientset, name string, namespace string) error {
