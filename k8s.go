@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -25,8 +26,12 @@ func GetClientSet() (*kubernetes.Clientset, error) {
 }
 
 func externalClientSet() (*kubernetes.Clientset, error) {
-	home := homedir.HomeDir()
-	kubeconfig := filepath.Join(home, ".kube", "config")
+	kubeconfig := os.Getenv("KUBECONFIG")
+
+	if kubeconfig == "" {
+		home := homedir.HomeDir()
+		kubeconfig = filepath.Join(home, ".kube", "config")
+	}
 
 	// use the current context in kubeconfig
 	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
