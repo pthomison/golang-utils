@@ -45,13 +45,13 @@ func (c *DBClient) Connect() {
 	c.DB = db
 }
 
-func SelectAll[T any](c *DBClient, columns []string) []T {
-	var output []T
-	result := c.DB.Select(columns...).Find(&output)
-	Check(result.Error)
+// func SelectAll[T any](c *DBClient, columns []string) []T {
+// 	var output []T
+// 	result := c.DB.Select(columns[0], columns[1:]...).Find(&output)
+// 	Check(result.Error)
 
-	return output
-}
+// 	return output
+// }
 
 // func SelectID_All[T any](c *DBClient) []T {
 // 	var output []T
