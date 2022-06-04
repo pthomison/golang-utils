@@ -46,49 +46,49 @@ func (c *DBClient) Connect() {
 	c.DB = db
 }
 
-func SelectAll_All[T any](c *Client) []T {
+func SelectAll_All[T any](c *DBClient) []T {
 	var output []T
-	result := c.DBClient.DB.Find(&output)
+	result := c.DB.Find(&output)
 	Check(result.Error)
 
 	return output
 }
 
-func SelectID_All[T any](c *Client) []T {
+func SelectID_All[T any](c *DBClient) []T {
 	var output []T
-	result := c.DBClient.DB.Select("id").Find(&output)
+	result := c.DB.Select("id").Find(&output)
 	Check(result.Error)
 
 	return output
 }
 
-func SelectAll_ByID[T any](c *Client, ids []uint64) []T {
+func SelectAll_ByID[T any](c *DBClient, ids []uint64) []T {
 	var output []T
-	result := c.DBClient.DB.Where(ids).Find(&output)
+	result := c.DB.Where(ids).Find(&output)
 	Check(result.Error)
 
 	return output
 }
 
-func SelectAll_IDSpan[T any](c *Client, start uint64, end uint64) []T {
+func SelectAll_IDSpan[T any](c *DBClient, start uint64, end uint64) []T {
 	var output []T
-	result := c.DBClient.DB.Where("id >= ? AND id < ?", start, end).Find(&output)
+	result := c.DB.Where("id >= ? AND id < ?", start, end).Find(&output)
 	Check(result.Error)
 
 	return output
 }
 
-func SelectAll_TimestampSpan[T any](c *Client, start time.Time, end time.Time) []T {
+func SelectAll_TimestampSpan[T any](c *DBClient, start time.Time, end time.Time) []T {
 	var output []T
-	result := c.DBClient.DB.Where("timestamp >= ? AND timestamp < ?", start, end).Order("timestamp asc").Find(&output)
+	result := c.DB.Where("timestamp >= ? AND timestamp < ?", start, end).Order("timestamp asc").Find(&output)
 	Check(result.Error)
 
 	return output
 }
 
-func SelectID_IDSpan[T any](c *Client, start uint64, end uint64) []T {
+func SelectID_IDSpan[T any](c *DBClient, start uint64, end uint64) []T {
 	var output []T
-	result := c.DBClient.DB.Where("id >= ? AND id < ?", start, end).Select("id").Find(&output)
+	result := c.DB.Where("id >= ? AND id < ?", start, end).Select("id").Find(&output)
 	Check(result.Error)
 
 	return output
