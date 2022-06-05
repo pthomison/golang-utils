@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"
 )
 
@@ -53,42 +54,12 @@ func SelectAll[T any](c *DBClient, columns []string) []T {
 	return output
 }
 
-// func SelectID_All[T any](c *DBClient) []T {
-// 	var output []T
-// 	result := c.DB.Select("id").Find(&output)
-// 	Check(result.Error)
+func Create[T any](c *DBClient, objs []T) {
+	result := dbc.DB.Create(objs)
+	Check(result.Error)
+}
 
-// 	return output
-// }
-
-// func SelectAll_ByID[T any](c *DBClient, ids []uint64) []T {
-// 	var output []T
-// 	result := c.DB.Where(ids).Find(&output)
-// 	Check(result.Error)
-
-// 	return output
-// }
-
-// func SelectAll_IDSpan[T any](c *DBClient, start uint64, end uint64) []T {
-// 	var output []T
-// 	result := c.DB.Where("id >= ? AND id < ?", start, end).Find(&output)
-// 	Check(result.Error)
-
-// 	return output
-// }
-
-// func SelectAll_TimestampSpan[T any](c *DBClient, start time.Time, end time.Time) []T {
-// 	var output []T
-// 	result := c.DB.Where("timestamp >= ? AND timestamp < ?", start, end).Order("timestamp asc").Find(&output)
-// 	Check(result.Error)
-
-// 	return output
-// }
-
-// func SelectID_IDSpan[T any](c *DBClient, start uint64, end uint64) []T {
-// 	var output []T
-// 	result := c.DB.Where("id >= ? AND id < ?", start, end).Select("id").Find(&output)
-// 	Check(result.Error)
-
-// 	return output
-// }
+func CreateOrOverwrite[T any](c *DBClient, objs []T) {
+	result := dbc.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(objs)
+	Check(result.Error)
+}
