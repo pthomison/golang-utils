@@ -55,11 +55,11 @@ func SelectAll[T any](c *DBClient, columns []string) []T {
 }
 
 func Create[T any](c *DBClient, objs []T) {
-	result := dbc.DB.Create(objs)
+	result := c.DB.Create(objs)
 	Check(result.Error)
 }
 
 func CreateOrOverwrite[T any](c *DBClient, objs []T) {
-	result := dbc.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(objs)
+	result := c.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(objs)
 	Check(result.Error)
 }
