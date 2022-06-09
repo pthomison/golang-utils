@@ -31,8 +31,8 @@ func (c *DBClient) RegisterFlags(cmd *cobra.Command) {
 	cmd.MarkPersistentFlagRequired("db-password")
 }
 
-func (c *DBClient) InitializeClient() {
-	c.Connect()
+func (c *DBClient) InitializeClient(l logger.LogLevel) {
+	c.Connect(l)
 }
 
 func (c *DBClient) Connect(l logger.LogLevel) {
