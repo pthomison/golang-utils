@@ -35,11 +35,11 @@ func (c *DBClient) InitializeClient() {
 	c.Connect()
 }
 
-func (c *DBClient) Connect() {
+func (c *DBClient) Connect(l logger.Interface) {
 	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", c.dbHost, c.dbPort, c.dbUser, c.dbPassword, c.dbName)
 
 	db, err := gorm.Open(postgres.Open(psqlconn), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Silent),
+		Logger: logger.Default.LogMode(l),
 	})
 	Check(err)
 
