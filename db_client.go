@@ -54,6 +54,14 @@ func SelectAll[T any](c *DBClient, columns []string) []T {
 	return output
 }
 
+func SelectWhere[T any](c *DBClient, columns []string, whereQuery interface{}, whereArgs []interface{}) []T {
+	var output []T
+	result := c.DB.Where(whereQuery, whereArgs...).Select(columns).Find(&output)
+	Check(result.Error)
+
+	return output
+}
+
 func Create[T any](c *DBClient, objs []T) {
 	result := c.DB.Create(objs)
 	Check(result.Error)
