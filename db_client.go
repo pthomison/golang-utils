@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"
@@ -12,6 +13,10 @@ import (
 
 type DBClient struct {
 	DB *gorm.DB
+
+	dbEngine string
+
+	sqliteFile string
 
 	dbHost     string
 	dbUser     string
@@ -21,14 +26,17 @@ type DBClient struct {
 }
 
 func (c *DBClient) RegisterFlags(cmd *cobra.Command) {
-	cmd.PersistentFlags().StringVarP(&c.dbHost, "db-host", "", "", "")
-	cmd.PersistentFlags().StringVarP(&c.dbUser, "db-user", "", "postgres", "")
-	cmd.PersistentFlags().StringVarP(&c.dbPort, "db-port", "", "5432", "")
-	cmd.PersistentFlags().StringVarP(&c.dbPassword, "db-password", "", "", "")
-	cmd.PersistentFlags().StringVarP(&c.dbName, "db-name", "", "postgres", "")
 
-	cmd.MarkPersistentFlagRequired("db-host")
-	cmd.MarkPersistentFlagRequired("db-password")
+	cmd.PersistentFlags().StringVarP(&c.dbEngine, "db-engine", "", "sqlite", "")
+
+	cmd.PersistentFlags().StringVarP(&c.sqliteFile, "sqlite-file", "", "gorm.db", "")
+
+	cmd.PersistentFlags().StringVarP(&c.dbHost, "postgres-host", "", "", "")
+	cmd.PersistentFlags().StringVarP(&c.dbUser, "postgres-user", "", "postgres", "")
+	cmd.PersistentFlags().StringVarP(&c.dbPort, "postgres-port", "", "5432", "")
+	cmd.PersistentFlags().StringVarP(&c.dbPassword, "postgres-password", "", "", "")
+	cmd.PersistentFlags().StringVarP(&c.dbName, "postgres-name", "", "postgres", "")
+
 }
 
 func (c *DBClient) InitializeClient(l logger.LogLevel) {
@@ -36,12 +44,19 @@ func (c *DBClient) InitializeClient(l logger.LogLevel) {
 }
 
 func (c *DBClient) Connect(l logger.LogLevel) {
-	psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", c.dbHost, c.dbPort, c.dbUser, c.dbPassword, c.dbName)
 
-	db, err := gorm.Open(postgres.Open(psqlconn), &gorm.Config{
-		Logger: logger.Default.LogMode(l),
-	})
-	Check(err)
+	var db *gorm.DB
+
+	if c.dbEngine == "postgres" {
+		psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", c.dbHost, c.dbPort, c.dbUser, c.dbPassword, c.dbName)
+
+		db, err := gorm.Open(postgres.Open(psqlconn), &gorm.Config{
+			Logger: logger.Default.LogMode(l),
+		})
+		Check(err)
+	} else if c.dbEngine == "sqlite" {
+		db, err := gorm.Open(sqlite.Open(c.sqliteFile), &gorm.Config{})
+	}
 
 	c.DB = db
 }
