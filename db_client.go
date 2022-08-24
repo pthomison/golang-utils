@@ -15,27 +15,27 @@ type DBClient struct {
 	DB *gorm.DB
 
 	dbEngine string
+	dbName   string
 
 	sqliteFile string
 
-	dbHost     string
-	dbUser     string
-	dbPort     string
-	dbPassword string
-	dbName     string
+	pgHost     string
+	pgUser     string
+	pgPort     string
+	pgPassword string
 }
 
 func (c *DBClient) RegisterFlags(cmd *cobra.Command) {
 
 	cmd.PersistentFlags().StringVarP(&c.dbEngine, "db-engine", "", "sqlite", "")
+	cmd.PersistentFlags().StringVarP(&c.dbName, "db-name", "", "postgres", "")
 
 	cmd.PersistentFlags().StringVarP(&c.sqliteFile, "sqlite-file", "", "gorm.db", "")
 
-	cmd.PersistentFlags().StringVarP(&c.dbHost, "postgres-host", "", "", "")
-	cmd.PersistentFlags().StringVarP(&c.dbUser, "postgres-user", "", "postgres", "")
-	cmd.PersistentFlags().StringVarP(&c.dbPort, "postgres-port", "", "5432", "")
-	cmd.PersistentFlags().StringVarP(&c.dbPassword, "postgres-password", "", "", "")
-	cmd.PersistentFlags().StringVarP(&c.dbName, "postgres-name", "", "postgres", "")
+	cmd.PersistentFlags().StringVarP(&c.pgHost, "postgres-host", "", "", "")
+	cmd.PersistentFlags().StringVarP(&c.pgUser, "postgres-user", "", "postgres", "")
+	cmd.PersistentFlags().StringVarP(&c.pgPort, "postgres-port", "", "5432", "")
+	cmd.PersistentFlags().StringVarP(&c.pgPassword, "postgres-password", "", "", "")
 
 }
 
