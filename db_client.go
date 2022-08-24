@@ -46,16 +46,18 @@ func (c *DBClient) InitializeClient(l logger.LogLevel) {
 func (c *DBClient) Connect(l logger.LogLevel) {
 
 	var db *gorm.DB
+	var err error
 
 	if c.dbEngine == "postgres" {
 		psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", c.dbHost, c.dbPort, c.dbUser, c.dbPassword, c.dbName)
 
-		db, err := gorm.Open(postgres.Open(psqlconn), &gorm.Config{
+		db, err = gorm.Open(postgres.Open(psqlconn), &gorm.Config{
 			Logger: logger.Default.LogMode(l),
 		})
 		Check(err)
 	} else if c.dbEngine == "sqlite" {
-		db, err := gorm.Open(sqlite.Open(c.sqliteFile), &gorm.Config{})
+		db, err = gorm.Open(sqlite.Open(c.sqliteFile), &gorm.Config{})
+		Check(err)
 	}
 
 	c.DB = db
