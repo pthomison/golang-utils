@@ -49,7 +49,7 @@ func (c *DBClient) Connect(l logger.LogLevel) {
 	var err error
 
 	if c.dbEngine == "postgres" {
-		psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", c.dbHost, c.dbPort, c.dbUser, c.dbPassword, c.dbName)
+		psqlconn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", c.pgHost, c.pgPort, c.pgUser, c.pgPassword, c.dbName)
 
 		db, err = gorm.Open(postgres.Open(psqlconn), &gorm.Config{
 			Logger: logger.Default.LogMode(l),
