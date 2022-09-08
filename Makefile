@@ -26,3 +26,6 @@ setupTestResources:
 
 teardownTestResources:
 	k3d cluster delete golang-utils-testing
+
+release:
+	goreleaser release --rm-dist
