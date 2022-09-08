@@ -2,7 +2,6 @@ package utils
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"path/filepath"
 
@@ -20,7 +19,7 @@ func GetClientSet() (*kubernetes.Clientset, error) {
 	if err == nil {
 		return cs, nil
 	} else {
-		fmt.Println(err)
+		// fmt.Println("Unable To Load Internal ClientSet, attempting External ClientSet")
 		return externalClientSet()
 	}
 }

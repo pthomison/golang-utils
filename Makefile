@@ -10,3 +10,6 @@ testK8S:
 
 testAWS:
 	go test -run "AWS*"
+
+setupTestResources:
+	
