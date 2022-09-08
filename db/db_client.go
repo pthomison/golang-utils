@@ -3,7 +3,7 @@ package utils
 import (
 	"fmt"
 
-	utils "github.com/pthomison/golang-utils"
+	"github.com/pthomison/golang-utils/utils"
 	"github.com/spf13/cobra"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
