@@ -2,16 +2,24 @@ tidy:
 	go fmt ./...
 	go mod tidy
 
-test: setupTestResources
-	go test
-	$(MAKE) teardownTestResources
+test: testK8S testAWS testDB testQueue
 
 testK8S: setupTestResources
-	go test -run "K8S*"
+	cd k8s && \
+	go test -v
 	$(MAKE) teardownTestResources
 
 testAWS:
-	go test -run "AWS*"
+	cd aws && \
+	go test -v
+
+testDB:
+	cd db && \
+	go test -v
+
+testQueue:
+	cd queue && \
+	go test -v
 
 setupTestResources:
 	k3d cluster create golang-utils-testing
