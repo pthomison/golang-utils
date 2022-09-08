@@ -3,7 +3,7 @@ module github.com/pthomison/golang-utils/db
 go 1.19
 
 require (
-	github.com/pthomison/golang-utils v0.0.6-0.20220908204255-cbb2be352c05
+	github.com/pthomison/golang-utils v0.1.1
 	github.com/spf13/cobra v1.5.0
 	gorm.io/driver/postgres v1.3.9
 	gorm.io/driver/sqlite v1.3.6

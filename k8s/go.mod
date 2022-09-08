@@ -3,7 +3,7 @@ module github.com/pthomison/golang-utils/k8s
 go 1.19
 
 require (
-	github.com/pthomison/golang-utils v0.0.6-0.20220908204255-cbb2be352c05
+	github.com/pthomison/golang-utils v0.1.1
 	k8s.io/api v0.25.0
 	k8s.io/apimachinery v0.25.0
 	k8s.io/client-go v0.25.0
