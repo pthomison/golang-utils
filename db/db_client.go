@@ -1,9 +1,9 @@
-package utils
+package db
 
 import (
 	"fmt"
 
-	"github.com/pthomison/golang-utils/utils"
+	utils "github.com/pthomison/golang-utils"
 	"github.com/spf13/cobra"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"

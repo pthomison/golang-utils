@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/aws/aws-sdk-go v1.44.94
-	github.com/pthomison/golang-utils v0.0.6-0.20220908195623-ce3f58e1d0fb
+	github.com/pthomison/golang-utils v0.0.6-0.20220908203453-525642956c84
 )
 
 require (
