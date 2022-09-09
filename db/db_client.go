@@ -3,7 +3,7 @@ package db
 import (
 	"fmt"
 
-	utils "github.com/pthomison/golang-utils"
+	"github.com/pthomison/errcheck"
 	"github.com/spf13/cobra"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
@@ -55,10 +55,10 @@ func (c *DBClient) Connect(l logger.LogLevel) {
 		db, err = gorm.Open(postgres.Open(psqlconn), &gorm.Config{
 			Logger: logger.Default.LogMode(l),
 		})
-		utils.Check(err)
+		errcheck.Check(err)
 	} else if c.dbEngine == "sqlite" {
 		db, err = gorm.Open(sqlite.Open(c.sqliteFile), &gorm.Config{})
-		utils.Check(err)
+		errcheck.Check(err)
 	}
 
 	c.DB = db
@@ -67,7 +67,7 @@ func (c *DBClient) Connect(l logger.LogLevel) {
 func SelectAll[T any](c *DBClient, columns []string) []T {
 	var output []T
 	result := c.DB.Select(columns).Find(&output)
-	utils.Check(result.Error)
+	errcheck.Check(result.Error)
 
 	return output
 }
@@ -75,17 +75,17 @@ func SelectAll[T any](c *DBClient, columns []string) []T {
 func SelectWhere[T any](c *DBClient, columns []string, whereQuery interface{}, whereArgs ...interface{}) []T {
 	var output []T
 	result := c.DB.Where(whereQuery, whereArgs).Select(columns).Find(&output)
-	utils.Check(result.Error)
+	errcheck.Check(result.Error)
 
 	return output
 }
 
 func Create[T any](c *DBClient, objs []T) {
 	result := c.DB.Create(objs)
-	utils.Check(result.Error)
+	errcheck.Check(result.Error)
 }
 
 func CreateOrOverwrite[T any](c *DBClient, objs []T) {
 	result := c.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(objs)
-	utils.Check(result.Error)
+	errcheck.Check(result.Error)
 }

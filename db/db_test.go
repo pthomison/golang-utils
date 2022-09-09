@@ -3,9 +3,9 @@ package db
 import (
 	"testing"
 
-	utils "github.com/pthomison/golang-utils"
+	"github.com/pthomison/errcheck"
 )
 
 func TestDB(t *testing.T) {
-	utils.CheckTest(nil, t)
+	errcheck.CheckTest(nil, t)
 }

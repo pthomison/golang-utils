@@ -3,9 +3,9 @@ package queue
 import (
 	"testing"
 
-	utils "github.com/pthomison/golang-utils"
+	"github.com/pthomison/errcheck"
 )
 
 func TestQueue(t *testing.T) {
-	utils.CheckTest(nil, t)
+	errcheck.CheckTest(nil, t)
 }
